@@ -14,6 +14,8 @@ use std::mem::MaybeUninit;
 use std::net::{self, Ipv4Addr, Ipv6Addr, Shutdown};
 #[cfg(unix)]
 use std::os::unix::io::{FromRawFd, IntoRawFd};
+#[cfg(target_os = "switch")]
+use std::os::switch::io::{FromRawFd, IntoRawFd};
 #[cfg(windows)]
 use std::os::windows::io::{FromRawSocket, IntoRawSocket};
 use std::time::Duration;
@@ -99,7 +101,7 @@ impl Socket {
                 // Violating this assumption (fd never negative) causes UB,
                 // something we don't want. So check for that we have this
                 // `assert!`.
-                #[cfg(unix)]
+                #[cfg(any(unix, target_os = "switch"))]
                 assert!(raw >= 0, "tried to create a `Socket` with an invalid fd");
                 sys::socket_from_raw(raw)
             },
@@ -1138,6 +1140,7 @@ impl Socket {
         target_os = "openbsd",
         target_os = "redox",
         target_os = "solaris",
+        target_os = "switch",
     )))]
     pub fn join_multicast_v4_n(
         &self,
@@ -1167,6 +1170,7 @@ impl Socket {
         target_os = "openbsd",
         target_os = "redox",
         target_os = "solaris",
+        target_os = "switch",
     )))]
     pub fn leave_multicast_v4_n(
         &self,
@@ -1196,6 +1200,7 @@ impl Socket {
         target_os = "netbsd",
         target_os = "redox",
         target_os = "fuchsia",
+        target_os = "switch"
     )))]
     pub fn join_ssm_v4(
         &self,
@@ -1228,6 +1233,7 @@ impl Socket {
         target_os = "netbsd",
         target_os = "redox",
         target_os = "fuchsia",
+        target_os = "switch"
     )))]
     pub fn leave_ssm_v4(
         &self,
@@ -1427,6 +1433,7 @@ impl Socket {
         target_os = "openbsd",
         target_os = "redox",
         target_os = "solaris",
+        target_os = "switch"
     )))]
     pub fn recv_tos(&self) -> io::Result<bool> {
         unsafe {

@@ -121,9 +121,10 @@ mod sockref;
 
 #[cfg_attr(unix, path = "sys/unix.rs")]
 #[cfg_attr(windows, path = "sys/windows.rs")]
+#[cfg_attr(target_os = "switch", path = "sys/switch.rs")]
 mod sys;
 
-#[cfg(not(any(windows, unix)))]
+#[cfg(not(any(windows, unix, target_os = "switch")))]
 compile_error!("Socket2 doesn't support the compile target");
 
 use sys::c_int;

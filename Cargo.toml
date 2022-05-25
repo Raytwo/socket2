@@ -44,6 +44,9 @@ features = [
   "Win32_System_WindowsProgramming",
 ]
 
+[target.'cfg(target_os = "switch")'.dependencies]
+libc-nnsdk = { git = "https://github.com/ultimate-research/libc-nnsdk.git" }
+
 [features]
 # Enable all API, even ones not available on all OSs.
 all = []
